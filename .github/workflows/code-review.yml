@@ -1,0 +1,40 @@
+name: Code Review
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "12.x"
+      - run: npm ci
+      - run: npm run lint
+      - name: Lint Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: lint-results
+          path: lint-results.txt
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "12.x"
+      - run: npm ci
+      - run: npm run security-scan
+      - name: Security Scan Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-scan-results
+          path: security-scan-results.txt
